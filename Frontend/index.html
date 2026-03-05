@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>逆水寒FB抽獎貼文分析</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>逆水寒Facebook抽獎貼文數據分析</h1>
+
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="openTab(event, 'tab1')">單次貼文分析</button>
+            <button class="tab-button" onclick="openTab(event, 'tab2'); showOverallRates();">歷史數據分析</button>
+            <button class="tab-button" onclick="openTab(event, 'tab3')">個人中獎查詢</button>
+            <button class="tab-button" onclick="openTab(event, 'tab4'); querySuperWinners();">超級幸運兒</button>
+        </div>
+
+        <div id="tab1" class="tab-content" style="display: block;">
+            <h2>單次貼文分析與上傳</h2>
+            <p>上傳從 Facebook 抽獎腳本匯出的 JSON 數據，進行即時分析與驗證，並上傳至資料庫。</p>
+
+            <div class="input-group">
+                <label for="data-file">選擇 JSON 檔案:</label>
+                <input type="file" id="data-file" accept=".json" class="btn-input">
+                <button onclick="analyzePostData()" class="btn-primary">開始分析並驗證</button>
+                <button onclick="uploadToDatabase()" id="upload-db-btn" class="btn-success" disabled>上傳至資料庫</button>
+            </div>
+
+            <p id="result-message" class="message-area"></p>
+            <p id="upload-message" class="message-area">請先完成分析並通過驗證。</p>
+
+            <div class="section">
+                <h3>貼文概要</h3>
+                <div id="summary-data">請上傳檔案後點擊分析...</div>
+            </div>
+
+            <div class="section">
+                <h3>中獎者列表 (驗證中獎者是否符合資格)</h3>
+                <table id="winners-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>FB 名稱</th>
+                            <th>留言內容</th>
+                            <th>已按讚</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">尚無中獎者數據。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <h2>歷史數據分析 (資料庫總結)</h2>
+            <p>此功能將統計資料庫中所有已上傳貼文的數據，提供宏觀洞察。</p>
+            <button onclick="showOverallRates()" class="btn-secondary">刷新歷史分析</button>
+
+            <div id="overall-rates" class="section">
+                點擊「刷新歷史分析」按鈕開始查詢...
+            </div>
+        </div>
+
+        <div id="tab3" class="tab-content">
+            <h2>個人參與及中獎紀錄查詢</h2>
+            <p>輸入用戶的 FB 名稱與主頁連結，查詢他在所有歷史貼文中的中獎次數與勝率。</p>
+
+            <div class="input-group">
+                <label for="user-name-input">用戶名:</label>
+                <input type="text" id="user-name-input" placeholder="例如：王小明 (必填)">
+                <label for="user-profile-url-input">主頁連結:</label>
+                <input type="text" id="user-profile-url-input"
+                    placeholder="例如：https://www.facebook.com/profile.php?... (必填)">
+                <button onclick="queryUserHistory()">查詢紀錄</button>
+            </div>
+
+            <div id="user-history" style="margin-top: 20px;">
+                查詢結果將顯示在這裡...
+            </div>
+        </div>
+
+        <div id="tab4" class="tab-content">
+            <h2>超級幸運兒 (重複中獎者) 查詢</h2>
+            <p>此功能將列出在資料庫中中獎兩次或以上的所有用戶。</p>
+
+            <div id="super-winners" style="margin-top: 20px;">
+                點擊「超級幸運兒」按鈕開始查詢...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab 切換邏輯
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // 預設開啟第一個 Tab
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('tab1').style.display = 'block';
+            document.querySelector('.tab-button').className += ' active';
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>
