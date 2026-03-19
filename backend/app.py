@@ -12,6 +12,9 @@ import re
 # 載入環境變數
 load_dotenv()
 
+app = Flask(__name__)
+CORS(app)
+
 # --- MongoDB Atlas 連線設定 ---
 MONGODB_URI = os.getenv('MONGODB_URI')
 if not MONGODB_URI:
