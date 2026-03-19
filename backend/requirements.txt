@@ -1,5 +1,6 @@
 # midterm-project/backend/requirements.txt
 flask
-pymongo
+pymongo[srv]
 python-dotenv
 flask-cors
+dnspython

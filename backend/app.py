@@ -12,7 +12,7 @@ import re
 # 載入環境變數
 load_dotenv()
 
-# --- MongoDB 連線設定 ---
+# --- MongoDB Atlas 連線設定 ---
 MONGODB_URI = os.getenv('MONGODB_URI')
 if not MONGODB_URI:
     raise ValueError("未設定 MONGODB_URI，請檢查 .env 檔案")
@@ -21,18 +21,27 @@ app = Flask(__name__)
 CORS(app) 
 
 try:
-    db_name = urlparse(MONGODB_URI).path.strip('/') or 'lottery_analysis_db'
-    client = MongoClient(MONGODB_URI)
+    # 從 URI 解析資料庫名稱，若無則使用預設名稱
+    parsed_db_name = urlparse(MONGODB_URI).path.strip('/')
+    db_name = parsed_db_name if parsed_db_name else 'lottery_analysis_db'
+    
+    # serverSelectionTimeoutMS=5000 讓連線失敗時能快速回報錯誤 (預設 30 秒)
+    client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
+    
+    # 發送 ping 指令以驗證連線是否成功
+    client.admin.command('ping')
+    
     db = client[db_name]
     posts_collection = db.lottery_posts 
     
-    print(f"✅ MongoDB 連線成功，資料庫：{db_name}")
+    print(f"✅ MongoDB Atlas 連線成功，資料庫：{db_name}")
 
     posts_collection.create_index("post_meta.post_url", unique=True)
     print("✅ 已設定 post_meta.post_url 唯一索引")
 
 except Exception as e:
-    print(f"❌ MongoDB 連線失敗或索引設定錯誤: {e}")
+    print(f"❌ MongoDB Atlas 連線失敗: {e}")
+    raise  # 讓程式啟動失敗，以便立即發現問題
 
 
 # =========================================================
