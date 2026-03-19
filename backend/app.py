@@ -44,6 +44,14 @@ except Exception as e:
     raise  # 讓程式啟動失敗，以便立即發現問題
 
 
+@app.route('/')
+def home():
+    return jsonify({
+        "status": "online",
+        "project": "Lottery Analysis System API",
+        "message": "Backend is running and connected to MongoDB Atlas!"
+    }), 200
+
 # =========================================================
 # 路由 1: 資料上傳、缺失與重複篩選 (POST /api/posts/upload)
 # (保持不變)
@@ -406,6 +414,6 @@ def show_super_winners():
 # 伺服器啟動
 # =========================================================
 if __name__ == '__main__':
-    PORT = int(os.getenv('PORT', 5000))
-    print(f"🚀 伺服器啟動於 http://127.0.0.1:{PORT} (請確保前端與此端口一致，或使用代理)")
-    app.run(debug=True, port=PORT)
+    # 這裡很重要：一定要讀取環境變數的 PORT，否則 Render 會找不到你的網頁
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
