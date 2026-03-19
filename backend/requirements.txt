@@ -1,6 +1,6 @@
-# midterm-project/backend/requirements.txt
 flask
 pymongo[srv]
 python-dotenv
 flask-cors
 dnspython
+gunicorn
