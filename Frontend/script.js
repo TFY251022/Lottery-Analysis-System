@@ -2,7 +2,7 @@
 
 let currentAnalysisData = null;
 // 🚨 請確認此 URL 與 app.py 運行端口一致 (預設為 5000)
-const API_BASE_URL = 'https://miao-midterm-backend.onrender.com/api';
+const API_BASE_URL = 'https://miao-midterm-backend.onrender.com/api/posts';
 
 // ==========================================================
 // 輔助函式 (數據解析與格式化)
